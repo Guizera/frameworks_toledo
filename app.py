@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# Rotas básicas
+# Rotas básicabasicas
 @app.route('/')
 def home():
     return render_template('home.html')

@@ -1,0 +1,58 @@
+erDiagram
+    USUARIO {
+        int id PK
+        string nome
+        string email
+        string senha
+        datetime data_cadastro
+    }
+    ANUNCIO {
+        int id PK
+        string titulo
+        string descricao
+        float preco
+        datetime data_publicacao
+        int usuario_id FK
+        int categoria_id FK
+    }
+    CATEGORIA {
+        int id PK
+        string nome
+        string descricao
+    }
+    PERGUNTA {
+        int id PK
+        string texto
+        datetime data_pergunta
+        int usuario_id FK
+        int anuncio_id FK
+    }
+    RESPOSTA {
+        int id PK
+        string texto
+        datetime data_resposta
+        int pergunta_id FK
+    }
+    COMPRA {
+        int id PK
+        datetime data_compra
+        float valor_total
+        int usuario_id FK
+        int anuncio_id FK
+    }
+    FAVORITO {
+        int id PK
+        datetime data_adicao
+        int usuario_id FK
+        int anuncio_id FK
+    }
+
+    USUARIO ||--o{ ANUNCIO : "possui"
+    USUARIO ||--o{ PERGUNTA : "faz"
+    USUARIO ||--o{ COMPRA : "realiza"
+    USUARIO ||--o{ FAVORITO : "adiciona"
+    ANUNCIO }|--|| CATEGORIA : "pertence"
+    ANUNCIO ||--o{ PERGUNTA : "recebe"
+    PERGUNTA ||--o| RESPOSTA : "tem"
+    ANUNCIO ||--o{ COMPRA : "vendido em"
+    ANUNCIO ||--o{ FAVORITO : "favoritado em" 
