@@ -55,8 +55,12 @@ python app.py
 
 ## Modelo Entidade-Relacionamento (MER)
 
-O MER do projeto está disponível no arquivo `docs/mer.png`.
+O MER do projeto está disponível no arquivo `docs/mer.mmd`.
 
 ## Diagrama de Navegação
 
-O diagrama de navegação está disponível no arquivo `docs/navigation.png`. 
+O diagrama de navegação está disponível no arquivo `docs/navegacao.mmd`.
+
+## Orientação
+
+Todos os mmd estão vinculados ao `docs/documentacao.pdf`.
