@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Minhas Compras</h1>
+
+    {% if purchases %}
+    <div class="row">
+        {% for purchase in purchases %}
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark text-light">
+                <div class="card-body">
+                    <h5 class="card-title">{{ purchase.ad.title }}</h5>
+                    <p class="card-text">{{ purchase.ad.description[:200] }}...</p>
+                    <p class="card-text">
+                        <strong>Valor: R$ {{ "%.2f"|format(purchase.total_value) }}</strong>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Vendedor: {{ purchase.ad.owner.name }}<br>
+                            Data da compra: {{ purchase.created_at.strftime('%d/%m/%Y %H:%M') }}
+                        </small>
+                    </p>
+                    <div class="mt-3">
+                        <a href="{{ url_for('view_ad', id=purchase.ad.id) }}" class="btn btn-primary">Ver Anúncio</a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal{{ purchase.id }}">
+                            Cancelar Compra
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Cancelamento -->
+            <div class="modal fade" id="cancelModal{{ purchase.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Confirmar Cancelamento</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Tem certeza que deseja cancelar a compra de "{{ purchase.ad.title }}"?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                            <form action="{{ url_for('cancel_purchase', id=purchase.id) }}" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-danger">Sim, Cancelar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        Você ainda não fez nenhuma compra. 
+        <a href="{{ url_for('list_ads') }}" class="alert-link">Ver anúncios disponíveis</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

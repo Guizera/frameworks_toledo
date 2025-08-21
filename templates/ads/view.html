@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('list_ads') }}">Anúncios</a></li>
+            <li class="breadcrumb-item active">{{ ad.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 class="card-title">{{ ad.title }}</h1>
+                    <p class="card-text">{{ ad.description }}</p>
+                    <p class="card-text">
+                        <strong>Preço: R$ {{ "%.2f"|format(ad.price) }}</strong>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Categoria: <a href="{{ url_for('view_category', id=ad.category.id) }}">{{ ad.category.name }}</a>
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Publicado por {{ ad.owner.name }} em {{ ad.created_at.strftime('%d/%m/%Y %H:%M') }}
+                        </small>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.id != ad.user_id %}
+                            <button class="btn btn-success btn-lg w-100 mb-2" data-bs-toggle="modal" data-bs-target="#purchaseModal">
+                                Comprar
+                            </button>
+                            <form action="{{ url_for('toggle_favorite', ad_id=ad.id) }}" method="POST">
+                                <button type="submit" class="btn btn-outline-warning w-100 mb-2">
+                                    {% if ad.id in current_user.favorites|map(attribute='ad_id')|list %}
+                                        Remover dos Favoritos
+                                    {% else %}
+                                        Adicionar aos Favoritos
+                                    {% endif %}
+                                </button>
+                            </form>
+                            <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#questionModal">
+                                Fazer Pergunta
+                            </button>
+                        {% else %}
+                            <a href="{{ url_for('edit_ad', id=ad.id) }}" class="btn btn-warning btn-lg w-100 mb-2">
+                                Editar Anúncio
+                            </a>
+                            <button type="button" class="btn btn-danger btn-lg w-100" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                Excluir Anúncio
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-info">
+                            <a href="{{ url_for('login') }}">Faça login</a> para interagir com este anúncio.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if ad.questions %}
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-header">
+            <h3>Perguntas</h3>
+        </div>
+        <div class="card-body">
+            {% for question in ad.questions %}
+            <div class="mb-4">
+                <div class="d-flex justify-content-between">
+                    <h5>{{ question.author.name }}</h5>
+                    <small class="text-muted">{{ question.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                </div>
+                <p>{{ question.text }}</p>
+                
+                {% if question.answer %}
+                <div class="ms-4 mt-2 p-3 bg-secondary rounded">
+                    <div class="d-flex justify-content-between">
+                        <h6>Resposta do Vendedor</h6>
+                        <small class="text-muted">{{ question.answer.created_at.strftime('%d/%m/%Y %H:%M') }}</small>
+                    </div>
+                    <p class="mb-0">{{ question.answer.text }}</p>
+                </div>
+                {% elif current_user.is_authenticated and current_user.id == ad.user_id %}
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#answerModal{{ question.id }}">
+                    Responder
+                </button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if current_user.is_authenticated and current_user.id == ad.user_id %}
+    <!-- Modal de Exclusão -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir o anúncio "{{ ad.title }}"?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ url_for('delete_ad', id=ad.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if current_user.is_authenticated and current_user.id != ad.user_id %}
+    <!-- Modal de Compra -->
+    <div class="modal fade" id="purchaseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja comprar "{{ ad.title }}" por R$ {{ "%.2f"|format(ad.price) }}?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ url_for('create_purchase', ad_id=ad.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-success">Confirmar Compra</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pergunta -->
+    <div class="modal fade" id="questionModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Fazer Pergunta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ url_for('create_question', ad_id=ad.id) }}" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="questionText" class="form-label">Sua pergunta:</label>
+                            <textarea class="form-control bg-dark text-light" id="questionText" name="text" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Enviar Pergunta</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

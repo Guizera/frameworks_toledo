@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('list_categories') }}">Categorias</a></li>
+            <li class="breadcrumb-item active">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="card bg-dark text-light mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="card-title">{{ category.name }}</h1>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <div>
+                    <a href="{{ url_for('edit_category', id=category.id) }}" class="btn btn-warning">Editar</a>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        Excluir
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+            <p class="card-text">{{ category.description or 'Sem descrição' }}</p>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Anúncios nesta categoria</h2>
+    
+    <div class="row">
+        {% for ad in ads %}
+        <div class="col-md-4 mb-4">
+            <div class="card bg-dark text-light h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ ad.title }}</h5>
+                    <p class="card-text">{{ ad.description[:150] }}...</p>
+                    <p class="card-text">
+                        <strong>Preço: R$ {{ "%.2f"|format(ad.price) }}</strong>
+                    </p>
+                    <a href="{{ url_for('view_ad', id=ad.id) }}" class="btn btn-primary">Ver Detalhes</a>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">
+                        Publicado por {{ ad.owner.name }} em {{ ad.created_at.strftime('%d/%m/%Y') }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Nenhum anúncio nesta categoria.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if current_user.is_authenticated and current_user.is_admin %}
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir a categoria "{{ category.name }}"?</p>
+                    {% if category.ads %}
+                    <div class="alert alert-warning">
+                        Esta categoria possui {{ category.ads|length }} anúncios. 
+                        Não será possível excluí-la até que todos os anúncios sejam removidos ou movidos para outra categoria.
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form action="{{ url_for('delete_category', id=category.id) }}" method="POST" style="display: inline;">
+                        <button type="submit" class="btn btn-danger" {% if category.ads %}disabled{% endif %}>
+                            Confirmar Exclusão
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

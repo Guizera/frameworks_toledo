@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="jumbotron bg-dark text-light p-5 rounded">
+        <h1 class="display-4">Bem-vindo ao E-commerce Toledo</h1>
+        <p class="lead">A melhor plataforma para comprar e vender produtos.</p>
+        <hr class="my-4">
+        {% if current_user.is_authenticated %}
+            <p>Olá, {{ current_user.name }}! O que você gostaria de fazer hoje?</p>
+            <div class="row mt-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark text-light border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">Meus Anúncios</h5>
+                            <p class="card-text">Gerencie seus anúncios ativos.</p>
+                            <a href="{{ url_for('user_ads') }}" class="btn btn-primary">Ver Anúncios</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark text-light border-success">
+                        <div class="card-body">
+                            <h5 class="card-title">Minhas Compras</h5>
+                            <p class="card-text">Veja seu histórico de compras.</p>
+                            <a href="{{ url_for('user_purchases') }}" class="btn btn-success">Ver Compras</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark text-light border-warning">
+                        <div class="card-body">
+                            <h5 class="card-title">Minhas Vendas</h5>
+                            <p class="card-text">Acompanhe suas vendas.</p>
+                            <a href="{{ url_for('user_sales') }}" class="btn btn-warning">Ver Vendas</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-dark text-light border-info">
+                        <div class="card-body">
+                            <h5 class="card-title">Favoritos</h5>
+                            <p class="card-text">Veja seus itens favoritos.</p>
+                            <a href="{{ url_for('user_favorites') }}" class="btn btn-info">Ver Favoritos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Faça login ou cadastre-se para começar a comprar e vender!</p>
+            <div class="mt-4">
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('login') }}" role="button">Login</a>
+                <a class="btn btn-success btn-lg" href="{{ url_for('register') }}" role="button">Cadastre-se</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h2 class="mb-4">Últimos Anúncios</h2>
+            <div class="row">
+                {% for ad in latest_ads %}
+                <div class="col-md-4 mb-4">
+                    <div class="card bg-dark text-light h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ ad.title }}</h5>
+                            <p class="card-text">{{ ad.description[:150] }}...</p>
+                            <p class="card-text"><strong>Preço: R$ {{ "%.2f"|format(ad.price) }}</strong></p>
+                            <a href="{{ url_for('view_ad', id=ad.id) }}" class="btn btn-primary">Ver Detalhes</a>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Publicado em {{ ad.created_at.strftime('%d/%m/%Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
