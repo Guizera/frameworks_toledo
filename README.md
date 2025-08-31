@@ -1,16 +1,63 @@
-# E-commerce Platform
+# E-commerce Flask
 
-Este é um projeto de e-commerce desenvolvido com Flask para a disciplina de Frameworks.
+Sistema de e-commerce desenvolvido com Flask para o trabalho da disciplina de Frameworks.
+
+## Tecnologias Utilizadas
+
+- Python 3.9+
+- Flask 3.0.2
+- SQLAlchemy 2.0.28
+- Flask-Login 0.6.3
+- Bootstrap 5.3.0
 
 ## Funcionalidades
 
-- Sistema de usuários (cadastro e login)
-- Gerenciamento de anúncios
-- Categorização de produtos
-- Sistema de perguntas e respostas
-- Compra de produtos
+- Sistema de autenticação e autorização
+- CRUD completo de usuários
+- Gerenciamento de categorias
+- Sistema de anúncios
+- Perguntas e respostas
+- Sistema de compras
 - Lista de favoritos
-- Relatórios de vendas e compras
+- Interface responsiva
+
+## Instalação
+
+1. Clone o repositório:
+```bash
+git clone https://github.com/Guizera/frameworks_toledo
+cd seu-repositorio
+```
+
+2. Crie um ambiente virtual:
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. Instale as dependências:
+```bash
+pip install -r requirements.txt
+```
+
+4. Configure as variáveis de ambiente:
+```bash
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
+```
+
+5. Inicialize o banco de dados:
+```bash
+python
+>>> from app import db
+>>> db.create_all()
+```
+
+6. Execute a aplicação:
+```bash
+python app.py
+```
 
 ## Estrutura do Projeto
 
@@ -18,49 +65,67 @@ Este é um projeto de e-commerce desenvolvido com Flask para a disciplina de Fra
 trabalho_frameworks/
 ├── app.py              # Aplicação principal
 ├── models.py           # Modelos do banco de dados
-├── requirements.txt    # Dependências do projeto
-└── templates/         # Templates HTML
-    └── base.html      # Template base
+├── requirements.txt    # Dependências
+├── static/            # Arquivos estáticos
+├── templates/         # Templates HTML
+│   ├── ads/          # Templates de anúncios
+│   ├── categories/   # Templates de categorias
+│   ├── users/        # Templates de usuários
+│   └── base.html     # Template base
+└── docs/             # Documentação
 ```
 
-## Como executar
+## Rotas Protegidas
 
-1. Crie um ambiente virtual:
+O sistema utiliza Flask-Login para proteger rotas que requerem autenticação. Consulte [docs/rotas_protegidas.md](docs/rotas_protegidas.md) para mais detalhes.
+
+## Interface
+
+A interface foi desenvolvida com Bootstrap 5.3.0, garantindo:
+- Design responsivo
+- Tema escuro consistente
+- Componentes modernos
+- Boa experiência do usuário
+
+Mais detalhes em [docs/bootstrap_implementacao.md](docs/bootstrap_implementacao.md).
+
+## Implantação
+
+O sistema está implantado no PythonAnywhere. O guia completo de implantação está disponível em [docs/implantacao_pythonanywhere.md](docs/implantacao_pythonanywhere.md).
+
+Acesse o sistema em: https://seu-usuario.pythonanywhere.com
+
+## Desenvolvimento
+
+1. Crie uma branch para sua feature:
 ```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate     # Windows
+git checkout -b feature/nova-funcionalidade
 ```
 
-2. Instale as dependências:
+2. Faça commit das alterações:
 ```bash
-pip install -r requirements.txt
+git add .
+git commit -m "Adiciona nova funcionalidade"
 ```
 
-3. Execute a aplicação:
+3. Envie para o GitHub:
 ```bash
-python app.py
+git push origin feature/nova-funcionalidade
 ```
 
-4. Acesse http://localhost:5000 no navegador
+## Contribuição
 
-## Tecnologias Utilizadas
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas alterações
+4. Push para a branch
+5. Abra um Pull Request
 
-- Flask
-- SQLAlchemy
-- Flask-Login
-- Bootstrap 5
-- SQLite
+## Licença
 
-## Modelo Entidade-Relacionamento (MER)
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-O MER do projeto está disponível no arquivo `docs/mer.mmd`.
+## Autor
 
-## Diagrama de Navegação
+José Guilherme Alves da Cunha - [guizera7@gmail.com](mailto:guizera7@gmail.com)
 
-O diagrama de navegação está disponível no arquivo `docs/navegacao.mmd`.
-
-## Orientação
-
-Todos os mmd estão vinculados ao `docs/documentacao.pdf`.
