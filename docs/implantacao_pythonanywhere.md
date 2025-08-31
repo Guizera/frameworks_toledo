@@ -83,7 +83,7 @@
 ### 3.1. Arquivos Estáticos
 1. Na seção "Web", configure:
    - Static files URL: /static/
-   - Static files path: /home/seu-usuario/seu-repositorio/static
+   - Static files path: /home/guizera7/frameworks_toledo/static
 
 ### 3.2. Reload da Aplicação
 1. Clique em "Reload" na seção "Web"
@@ -114,8 +114,8 @@
 ## 5. Solução de Problemas
 
 ### 5.1. Logs
-- Error log: /var/log/seu-usuario.pythonanywhere.com.error.log
-- Access log: /var/log/seu-usuario.pythonanywhere.com.access.log
+- Error log: /var/log/guizera7.pythonanywhere.com.error.log
+- Access log: /var/log/guizera7.pythonanywhere.com.access.log
 - Server log: Seção "Web" > "Log files"
 
 ### 5.2. Problemas Comuns
