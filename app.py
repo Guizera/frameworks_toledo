@@ -301,15 +301,7 @@ def delete_answer(id):
     flash('Resposta excluída com sucesso!', 'success')
     return redirect(url_for('view_ad', id=ad.id))
 
-@app.route('/user/ads')
-@login_required
-def user_ads():
-    return render_template('user_ads.html')
 
-@app.route('/user/purchases')
-@login_required
-def user_purchases():
-    return render_template('user_purchases.html')
 
 @app.route('/user/sales')
 @login_required
