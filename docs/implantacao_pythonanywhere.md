@@ -29,7 +29,7 @@
 1. Abra um console Bash no PythonAnywhere
 2. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/Guizera/frameworks_toledo.git
    ```
 
 ### 2.3. Configurar Ambiente Virtual
@@ -48,14 +48,14 @@
 
 ### 2.4. Configurar a Web App
 1. Na seção "Web", configure:
-   - Source code: /home/seu-usuario/seu-repositorio
-   - Working directory: /home/seu-usuario/seu-repositorio
-   - Virtual environment: /home/seu-usuario/.virtualenvs/venv
+   - Source code: /home/guizera7/frameworks_toledo
+   - Working directory: /home/guizera7/frameworks_toledo
+   - Virtual environment: /home/guizera7/.virtualenvs/venv
 
 2. Edite o arquivo WSGI:
    ```python
    import sys
-   path = '/home/seu-usuario/seu-repositorio'
+   path = '/home/guizera7/frameworks_toledo'
    if path not in sys.path:
        sys.path.append(path)
 
