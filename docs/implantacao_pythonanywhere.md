@@ -21,7 +21,7 @@
 2. Vá para a Dashboard
 3. Clique em "Web" no menu superior
 4. Clique em "Add a new web app"
-5. Escolha seu domínio (username.pythonanywhere.com)
+5. Escolha seu domínio (guizera7.pythonanywhere.com)
 6. Selecione "Flask" como framework
 7. Escolha Python 3.9 como versão
 
@@ -90,7 +90,7 @@
 2. Aguarde a aplicação reiniciar
 
 ### 3.3. Verificação
-1. Acesse seu domínio (username.pythonanywhere.com)
+1. Acesse o domínio (guizera7.pythonanywhere.com)
 2. Teste todas as funcionalidades principais
 3. Verifique os logs em caso de erro
 
@@ -99,7 +99,7 @@
 ### 4.1. Atualizações
 1. No console Bash:
    ```bash
-   cd seu-repositorio
+   cd frameworks_toledo
    git pull
    workon venv
    pip install -r requirements.txt
@@ -137,7 +137,7 @@
 ## 6. Link de Acesso
 
 O sistema está disponível em:
-https://seu-usuario.pythonanywhere.com
+https://guizera7.pythonanywhere.com
 
 ## 7. Justificativas
 
