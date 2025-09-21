@@ -40,7 +40,7 @@ login_manager.init_app(app)
 # Formulários
 class UserForm(FlaskForm):
     name = StringField('Nome', validators=[DataRequired(), Length(min=2, max=100)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Length(min=6, max=120)])
     password = PasswordField('Senha', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirmar Senha', 
         validators=[DataRequired(), EqualTo('password')])
@@ -50,7 +50,7 @@ class UserForm(FlaskForm):
 from models import User, Ad, Category, Question, Answer, Purchase, Favorite
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired(), Length(min=6, max=120)])
     password = PasswordField('Senha', validators=[DataRequired()])
     submit = SubmitField('Entrar')
 
