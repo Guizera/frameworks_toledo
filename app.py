@@ -1,16 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, flash, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, TextAreaField, FloatField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 import os
 from datetime import datetime
+from extensions import db, login_manager
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
-import os
 
 # Configuração do banco de dados
 DB_USERNAME = os.getenv('DB_USERNAME', 'guizera7') 
@@ -18,14 +16,19 @@ DB_PASSWORD = os.getenv('DB_PASSWORD', '')
 DB_HOST = os.getenv('DB_HOST', 'guizera7.mysql.pythonanywhere-services.com')  
 DB_NAME = os.getenv('DB_NAME', 'guizera7$ecommerce') 
 
-# URL de conexão MySQL
-SQLALCHEMY_DATABASE_URI = f"mysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
-app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+# Configurações do Flask
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_recycle': 280,
+    'pool_timeout': 20,
+    'pool_pre_ping': True
+}
 
-db = SQLAlchemy(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+# Inicializar extensões
+db.init_app(app)
+login_manager.init_app(app)
 
 # Formulários
 class UserForm(FlaskForm):
@@ -36,16 +39,19 @@ class UserForm(FlaskForm):
         validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Cadastrar')
 
-# Rotas básicabasicas
-@app.route('/')
-def home():
-    latest_ads = Ad.query.order_by(Ad.created_at.desc()).limit(6).all()
-    return render_template('home.html', latest_ads=latest_ads)
+# Importar modelos
+from models import User, Ad, Category, Question, Answer, Purchase, Favorite
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Senha', validators=[DataRequired()])
     submit = SubmitField('Entrar')
+
+# Rotas básicas
+@app.route('/')
+def home():
+    latest_ads = Ad.query.order_by(Ad.created_at.desc()).limit(6).all()
+    return render_template('home.html', latest_ads=latest_ads)
 
 class CategoryForm(FlaskForm):
     name = StringField('Nome', validators=[DataRequired(), Length(min=2, max=50)])
