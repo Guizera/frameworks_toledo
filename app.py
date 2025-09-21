@@ -18,7 +18,14 @@ load_dotenv()
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
 
 # Configuração do banco de dados MySQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://guizera7:teste1256@guizera7.mysql.pythonanywhere-services.com/guizera7$default'
+MYSQL_USER = 'guizera7'
+MYSQL_PASSWORD = 'teste1256'
+MYSQL_HOST = 'guizera7.mysql.pythonanywhere-services.com'
+MYSQL_DB = 'guizera7$default'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DB}?charset=utf8mb4'
+app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 280,
