@@ -10,15 +10,15 @@ from extensions import db, login_manager
 
 app = Flask(__name__)
 
-# Configuração do banco de dados
-DB_USERNAME = os.getenv('DB_USERNAME', 'guizera7') 
-DB_PASSWORD = os.getenv('DB_PASSWORD', '')  
-DB_HOST = os.getenv('DB_HOST', 'guizera7.mysql.pythonanywhere-services.com')  
-DB_NAME = os.getenv('DB_NAME', 'guizera7$ecommerce') 
+# Carregar variáveis de ambiente do arquivo .env
+from dotenv import load_dotenv
+load_dotenv()
 
 # Configurações do Flask
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+
+# Configuração do banco de dados MySQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://guizera7:teste1256@guizera7.mysql.pythonanywhere-services.com/guizera7$default'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 280,
