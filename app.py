@@ -10,7 +10,17 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecommerce.db'
+import os
+
+# Configuração do banco de dados
+DB_USERNAME = os.getenv('DB_USERNAME', 'guizera7') 
+DB_PASSWORD = os.getenv('DB_PASSWORD', '')  
+DB_HOST = os.getenv('DB_HOST', 'guizera7.mysql.pythonanywhere-services.com')  
+DB_NAME = os.getenv('DB_NAME', 'guizera7$ecommerce') 
+
+# URL de conexão MySQL
+SQLALCHEMY_DATABASE_URI = f"mysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

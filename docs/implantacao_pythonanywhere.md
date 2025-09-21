@@ -70,12 +70,63 @@
    - DATABASE_URL
    - Outras variáveis específicas
 
-### 2.6. Configurar Banco de Dados
-1. No console Bash:
-   ```python
+### 2.6. Configurar Banco de Dados MySQL
+
+1. Na interface do PythonAnywhere:
+   - Clique na aba "Databases"
+   - Clique em "Create database" (nome será username$ecommerce)
+   - Anote a senha gerada para o MySQL
+   - Aguarde a criação do banco (pode levar alguns minutos)
+
+2. Configure as variáveis de ambiente:
+   - Na seção "Web", vá até "Environment variables"
+   - Adicione as seguintes variáveis:
+     ```
+     DB_USERNAME=seu_username
+     DB_PASSWORD=senha_gerada_mysql
+     DB_HOST=seu_username.mysql.pythonanywhere-services.com
+     DB_NAME=seu_username$ecommerce
+     ```
+
+3. No console Bash, instale o driver MySQL:
+   ```bash
+   cd frameworks_toledo
+   workon venv
+   pip install mysqlclient
+   ```
+
+4. Inicie o Python shell:
+   ```bash
    python
-   >>> from app import db
-   >>> db.create_all()
+   ```
+
+5. No shell Python, crie as tabelas:
+   ```python
+   from app import db, app
+   with app.app_context():
+       db.create_all()
+   ```
+
+4. Para criar um usuário administrador (opcional):
+   ```python
+   from app import User
+   from werkzeug.security import generate_password_hash
+   
+   admin = User(
+       name='Admin',
+       email='admin@example.com',
+       password=generate_password_hash('sua-senha-aqui'),
+       is_admin=True
+   )
+   
+   with app.app_context():
+       db.session.add(admin)
+       db.session.commit()
+   ```
+
+5. Saia do shell Python:
+   ```python
+   exit()
    ```
 
 ## 3. Implantação
